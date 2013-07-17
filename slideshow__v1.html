@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="reset.css">
+	<style>
+		body {
+			font-size:62.5%;
+			counter-reset: slide-inner;
+			counter-reset: slide;
+		}
+
+		#presentations {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.presentation {
+			width: 100%;
+		}
+
+		.presentation h1 {
+			font-size: 40px;
+		}
+
+		.slide {
+			position: relative;
+			float: left;
+			margin: 0 40px 70px 0;
+			width: 331px;
+			height: 221px;
+		}
+
+		.slide .slide-inner {
+			position: absolute;
+			overflow: hidden;
+			width: 1024px; height: 600px;
+			-webkit-transform-origin: 0 0;
+			-moz-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-moz-transform: scale(0.2);
+			-webkit-transform: scale(0.26);
+			-o-transform: scale(0.2);
+			-ms-transform: scale(0.2);
+			transform: scale(0.2);
+			padding: 120px;
+			background: #fff;
+			border: 5px solid #ddd;
+		}
+
+
+		.slide .slide-inner:after {
+			position: absolute;
+			bottom: -35px;
+			right: 0;
+			color: #999;
+			font: 15px serif;
+			counter-increment: slide-inner;
+			content: counter(slide-inner);
+		}		
+
+		.slide.active {
+			width: 100%;
+			height: 100%;
+			background: #444;
+			position: absolute;
+			top: 0; left: 0;
+		}		
+
+		.slide.active .slide-inner {
+			position: relative;
+			background: #fff;
+			left: 50%; top: 100px;
+			margin-left: -440px;
+			-webkit-transform: scale(0.7);
+			-moz-transform: scale(0.7);
+			z-index: 100;
+			border: none;
+		}
+
+		.slide.active .slide-inner:after {
+			padding: 10px 20px;
+			right: 50px; bottom: 50px;
+			color: #fff;
+			font-size: 30px;
+			font-family: serif;
+			font-style: italic;
+			background: #333;
+			border-radius: 60px;
+			z-index: 100;
+			counter-increment: slide;
+			content: counter(slide);
+		}
+
+		.slide-inner:hover {
+			cursor: pointer;
+			border: 5px solid #bbb;	
+		}
+
+		.slide h2 {
+			font-size:  800%;
+			margin-bottom: 20px;
+		}
+
+		.slide p {
+			font-size: 280%;
+			line-height: 60px;
+		}
+
+		.slide ul {
+			list-style: disc;
+			font-size: 280%;
+			line-height: 50px;
+		}
+
+		.slide ul li {
+			margin-bottom: 20px;
+		}
+
+		.slide:after {
+			position: absolute;
+			bottom: -35px;
+			right: 0;
+			color: #999;
+			font: 15px serif;
+			counter-increment: slide;
+			content: counter(slide);
+		}
+
+		.slide:hover:after {
+			color: #000;
+			border-bottom: 1px solid #000;
+
+		}
+
+
+		.slide.active {
+			width: 100%;
+			height: 100%;
+			background: #444;
+			position: absolute;
+			top: 0; left: 0;
+		}		
+
+		.slide.active .slide-inner {
+			background: #fff;
+			left: 50%; top: 100px;
+			margin-left: -440px;
+			-webkit-transform: scale(0.7);
+			z-index: 100;
+			border: none;
+		}
+
+		.slide.active:after {
+			
+			border: 1px solid red;
+
+		}		
+
+		#slideCounter {
+			display: none;
+			position: absolute;
+			bottom: -100px;
+			left: 50%; margin-left: -30px;
+			font-size: 60px;
+		}
+
+		#slideCounter:before {
+			content: "←";
+		}
+
+		#slideCounter:after {
+			content: "→";
+		}
+
+		@media screen and (min-width: 1300px) {
+			.slide {
+				width: 380px;
+				height: 305px;
+			}
+			.slide .slide-inner {
+				-webkit-transform: scale(0.3);
+				-moz-transform: scale(0.3);
+			}
+			.slide.active .slide-inner {
+			background: #fff;
+			left: 50%; top: 60px;
+			margin-left: -640px;
+			-webkit-transform: scale(1.0);
+			-moz-transform: scale(1.0);
+			}			
+		}
+
+		@media screen and (max-width: 768px) {
+			.slide {
+				width: 254px;
+				height: 205px;
+				margin: 0 30px 40px 0;
+			}
+
+			.slide .slide-inner {
+				-webkit-transform: scale(0.2);
+				-moz-transform: scale(0.2);
+			}
+
+			.slide:after {
+				bottom: -25px;
+			}
+			.slide.active .slide-inner {
+				background: #fff;
+				left: 50%; top: 60px;
+				margin-left: -315px;
+				-webkit-transform: scale(0.5);
+				-moz-transform: scale(0.5);
+			}				
+
+		}
+
+	#canvas {
+		display: none;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		z-index: 50;
+		background: #333;
+	}
+
+	</style>
+
+</head>
+<body>
+	<div id="canvas"></div>
+	<section class="presentation">
+		<article class="slide">
+			<div class="slide-inner">
+				<h2>Абзац с текстом</h2>
+				<p>
+					Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
+				</p>
+			</div>
+		</article>
+
+		<article class="slide">
+			<div class="slide-inner">
+				<h2>Ненумерованный список</h2>
+				<ul>
+					<li>Средиземноморская большая гаичка (Poecile lugubris)
+</li>
+					<li>Гирканская гаичка (Poecile hyrcanus) (часто рассматривается как подвид P. lugubris)
+</li>
+					<li>Черноголовая гаичка (Poecile palustris)
+</li>
+					<li>Буроголовая гаичка (Poecile montanus)
+</li>
+					<li>Джунгарская гаичка (Poecile songarus) (часто рассматривается как подвид P. montanus)
+</li>
+					<li>Каролинская гаичка (Poecile carolinensis)</li>
+				</ul>
+			</div>
+		</article>
+
+		<article class="slide">
+			<div class="slide-inner">
+				<h2>Абзац с текстом</h2>
+				<p>
+					Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
+				</p>
+			</div>
+		</article>
+
+
+		<article class="slide">
+			<div class="slide-inner">
+				<h2>Абзац с текстом</h2>
+				<p>
+					Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
+				</p>
+			</div>
+		</article>
+
+	</section>
+
+
+
+
+<script src="./jquery.js"></script>
+
+<script>
+	/*
+function cTheLight ( curSlide ) {
+
+
+	// Ссылки на элемент контейнера слайдов и на сами слайды
+	var container = document.getElementById('slides');
+	this.slides = container.getElementsByTagName('article');
+
+	// Убираем все слайды с экрана
+	for (var i = 0; i < this.slides.length; i++) {
+		//this.slides[i].style.display = 'none';
+	}
+	
+	//	Номер текущего слайда
+	this.curSlide = curSlide || 0;
+
+	this.showSlide();
+
+	var fwdHandler = document.getElementById('fwdBtn');
+	var bckHandler = document.getElementById('bckBtn');
+
+	fwdHandler.addEventListener("click", function() {alert("hello");}, false);	
+
+	//	Тест конструктора
+	console.log(this.slides.length);
+}
+
+//Устанавливает номер текущего слайда
+cTheLight.prototype.showSlide = function() {
+	this.slides[this.curSlide].style.display = 'block';
+};
+
+
+//Устанавливает номер текущего слайда
+cTheLight.prototype.setCurrentSlide = function( number ) {
+	this.curSlide = number;
+};
+
+
+// Получает номер текущего слайда
+cTheLight.prototype.getCurrentSlide = function() {
+	console.log( 'Current slide: ' + this.curSlide );
+};
+
+
+// Отображение текущего слайда
+cTheLight.prototype.showCurrentSlide = function() {
+	alert('Текущий слайд:' + this.curSlide);
+};
+
+var mySlideshow = new cTheLight();
+*/
+
+function Presentations() {
+	this.presentations = $('.presentation');
+}
+
+
+$('.slide').click(function() {
+	$('#canvas').show();
+	$(this).addClass('active');   
+});
+
+$('.slide.active').click(function() {
+	$('#canvas').show();
+	$(this).addClass('active');   
+});
+
+$(document).keydown(function(e){
+    if (e.keyCode == 37) { 
+    	var elemIndex;
+    	if ($('.slide.active')){
+    		elemIndex = $('.slide.active').index();
+    		$('.slide.active').removeClass('active');
+    		$('.slide').eq(elemIndex-1).addClass('active');
+    	}
+       
+       return false;
+    }
+    
+    if (e.keyCode == 39) { 
+    	var elemIndex;
+    	if ($('.slide.active')){
+    		elemIndex = $('.slide.active').index();
+    		$('.slide.active').removeClass('active');
+    		$('.slide').eq(elemIndex+1).addClass('active');
+    	}
+       
+       return false;
+    }
+
+    if (e.keyCode == 27) {
+    	$('.slide.active').removeClass('active');
+    	$('#canvas').hide();
+    }
+    
+});
+
+</script>
+
+</body>
+</html>
